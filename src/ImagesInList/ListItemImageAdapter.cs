@@ -12,16 +12,6 @@ namespace ImagesInList
         private readonly int[] _items;
         private readonly Activity _context;
 
-        private class JavaToDotNetWrapper<T> : Java.Lang.Object
-        {
-            public T Value { get; }
-
-            public JavaToDotNetWrapper(T value)
-            {
-                Value = value;
-            }
-        }
-
         public ListItemImageAdapter(Activity context, int[] items)
         {
             _context = context;
@@ -47,14 +37,12 @@ namespace ImagesInList
 
             var imageView = view.FindViewById<ImageViewAsync>(Resource.Id.icon);
 
-            var previousWork = imageView.Tag as JavaToDotNetWrapper<IScheduledWork>;
-            previousWork?.Value?.Cancel();
-
             imageView.SetImageDrawable(null);
 
-            var work = ImageService.Instance.LoadUrl($@"http://192.168.0.7:8011/{item}.png").Into(imageView);
-
-            imageView.Tag = new JavaToDotNetWrapper<IScheduledWork>(work);
+            if (item%2 == 0)
+            {
+                ImageService.Instance.LoadUrl($@"http://192.168.0.33:8011/{item}.png").Into(imageView);
+            }
 
             return view;
         }
